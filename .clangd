@@ -1,0 +1,7 @@
+# .clangd
+If:
+  PathMatch: .*\.(cpp|hpp|cxx|hxx|cc|hh|tpp|txx)$
+CompileFlags:
+  Add: [-std=c++23, -Wall, -Wextra, -stdlib=libc++, -pedantic, -fexperimental-library]
+Compiler: clang++ # Or g++ if that's what you're using
+Checks: '-*,modernize-pass-by-value'
