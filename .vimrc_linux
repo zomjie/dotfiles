@@ -357,6 +357,8 @@ function! CompileAndRun()
   " 3. Execute the combined command in a single terminal pane
   "execute 'botright terminal ' . &shell . ' -c "' . l:full_terminal_command . '"'
   execute 'botright terminal ++shell ++noclose ++eof=keep'  l:full_terminal_command
+  setlocal nonumber
+  setlocal norelativenumber
 endfunction
 
 let g:ctrlspace_use_tabline = 0

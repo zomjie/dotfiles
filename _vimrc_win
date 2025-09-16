@@ -1,0 +1,322 @@
+call plug#begin()
+
+Plug 'nanotech/jellybeans.vim'
+Plug 'morhetz/gruvbox'
+Plug 'tpope/vim-eunuch'
+Plug 'yegappan/mru'
+Plug 'majutsushi/tagbar'
+"Plug 'github/copilot.vim'
+Plug 'mbbill/undotree'
+Plug 'tpope/vim-surround'
+Plug 'preservim/nerdtree'
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-repeat'
+Plug 'junegunn/fzf', {'do': {-> fzf#install()}}
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'vimwiki/vimwiki'
+Plug 'frazrepo/vim-rainbow'
+Plug 'vim-autoformat/vim-autoformat'
+Plug 'machakann/vim-swap'
+Plug 'vim-scripts/SyntaxAttr.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'skywind3000/asyncrun.vim'
+"Plug 'puremourning/vimspector'
+Plug 'vim-scripts/matrix.vim--Yang'
+Plug 'drmikehenry/vim-fontsize'
+
+call plug#end()
+
+language messages en
+set enc=utf-8
+set nocompatible
+source $VIMRUNTIME\vimrc_example.vim
+
+set number
+set relativenumber
+set ignorecase
+set mouse=a
+set incsearch
+set scrolloff=0
+set nobackup
+
+syntax on
+set cursorline
+set termguicolors
+colorscheme gruvbox
+
+"packadd termdebug
+
+set bg=dark
+
+set guifont=Lucida\ Console:h15
+
+" Udowarning
+let g:undofile_warn_mode=2
+
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_tab_nr = 1
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#show_splits = 0
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#buffer_nr_show = 0
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline_theme='gruvbox'
+let g:airline#extensions#ycm#enabled = 1
+
+let g:gruvbox_invert_tabline=1
+let g:gruvbox_invert_signs = 1
+let g:gruvbox_improved_warnings=1
+let g:gruvbox_improved_strings=1
+
+let do_syntax_sel_menu = 1
+let do_no_layload_menus = 1
+
+" Tagbar
+nnoremap <F10>      :TagbarToggle<CR>
+inoremap <F10> <C-O>:TagbarToggle<CR>
+
+nnoremap <C-Q> :q<CR>
+" nnoremap <leader>sv :source ~/.vimrc<CR>
+nnoremap <silent> <C-L> :nohlsearch<CR><C-L>
+
+" 开关撤销树的键映射
+nnoremap <F2>      :UndotreeToggle<CR>
+inoremap <F2> <C-O>:UndotreeToggle<CR>
+
+tnoremap <Esc><Esc> <C-W>N
+tnoremap <C-A> <C-W>.
+
+" F7: Step Over (executes function calls without entering them)
+nnoremap <F7> :Over<CR>
+" F6: Step Into (enters function calls)
+nnoremap <F6> :Step<CR>
+" F5 Add an breakpoint
+nnoremap <F5> :Break<CR>
+
+nnoremap <Leader>t :botright terminal ++rows=20<CR>
+nnoremap <Leader>nt :tabe \| ter ++curwin<CR>
+
+" Mappings in terminal mode
+tnoremap <C-S-V> <C-W>"+
+
+noremap <leader>rb :RainbowToggle<CR>
+
+nnoremap<F11> :cp<CR>
+nnoremap<F12> :cn<CR>
+
+noremap <MiddleMouse> :tabclose<CR>
+
+" switch among the tabs
+nnoremap<C-Tab> gt
+nnoremap<C-S-Tab> gT
+
+nnoremap <F3> :Autoformat<CR>
+xnoremap <F3> :Autoformat<CR>
+nnoremap <silent><Space> :AutoformatLine<CR>
+
+nnoremap <Leader>a      :call SyntaxAttr()<CR>
+
+" Indent settings
+au FileType c,cpp,objc  setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=4 cinoptions=:0,g0,(0,w1
+au FileType json        setlocal expandtab shiftwidth=2 softtabstop=2
+au FileType vim         setlocal expandtab shiftwidth=2 softtabstop=2
+
+if v:version >= 800
+  packadd! editexisting
+endif
+
+if exists('$VIM_TERMINAL')
+  echoerr 'Do not run Vim inside a Vim terminal'
+  quit
+endif
+
+if has('persistent_undo')
+  set undofile
+
+  if has('win32')
+    set undodir=$HOME/vimfiles/undodir
+  else
+    set undodir=~/.vim/undodir
+  endif
+
+  if !isdirectory(&undodir)
+    call mkdir(&undodir, 'p', 0700)
+  endif
+endif
+
+source $VIMRUNTIME/ftplugin/man.vim
+set keywordprg=:Man
+
+" Copy and paste with system clipboard
+if has('gui_running')
+  nnoremap <C-S-V> "+gP
+  inoremap <C-S-V> <Esc>"+gpi
+  vnoremap <C-S-C> "+y
+  cnoremap <C-S-V> <C-r>+
+  "tnoremap <Esc><Esc> <C-\><C-n>
+else
+  nnoremap <C-V> <C-V>
+endif
+
+set tags=./tags;,tags,/usr/local/etc/systags
+
+augroup TermdebugResize
+  " Clear any old autocommands in this group to prevent duplicates
+  autocmd!
+  " When a file of type 'gdb' is opened (like Termdebug's GDB window)
+  " set its width to 45 columns.
+  autocmd FileType termdebug vertical resize 46 | resize 10
+augroup END
+
+" Set fold method
+set foldmethod=syntax
+set foldlevelstart=99
+
+"Close gvim menubar and toolbar, set font in gvim
+if has('gui_running')
+  set guioptions-=m
+  set guioptions-=T
+  set guioptions-=r
+endif
+
+let g:autoformat_verbosemode=1
+
+let &t_Cs = "\e[4:3m" " Start undercurl
+let &t_Ce = "\e[4:0m" " End underline/undercurl
+let g:terminal_ansi_colors = [
+      \'#282828', '#CC241D', '#98971A', '#D79921',
+      \'#458588', '#B16286', '#689D6A', '#D65D0E',
+      \'#fb4934', '#b8bb26', '#fabd2f', '#83a598',
+      \'#d3869b', '#8ec07c', '#fe8019', '#FBF1C7' ]
+
+highlight Terminal guibg='#282828'
+highlight Terminal guifg='#ebdbb2'
+let g:asyncrun_open = 10
+
+command! -bang -nargs=* -complete=file Make AsyncRun -program=make @<args>
+nnoremap<silent><F8> :if g:asyncrun_status != 'running'<bar>
+      \if &modifiable<bar>
+        \update<bar>
+      \endif<bar>
+        \exec 'Make'<bar>
+      \else<bar>
+        \AsyncStop<bar>
+      \endif<CR>
+nnoremap<S-F8> :cclose<CR>
+
+" NerdTree
+nnoremap <F9> :NERDTreeToggle<CR>
+inoremap <F9> <C-O>:NERDTreeToggle<CR>
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
+
+" The following option is specified for Windows
+set shell=pwsh
+" function! OpenVsTerminal()
+"     let cmd_list =<< trim END_CMD
+"         pwsh.exe -NoExit -Command "&{Import-Module
+"         'C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\Microsoft.VisualStudio.DevShell.dll';
+"         Enter-VsDevShell c18e172e -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'}"
+"     END_CMD
+
+"     let cmd_str = join(cmd_list, ' ')
+"     execute "ter ++close" cmd_str
+" endfunction
+
+" nnoremap <leader>t :call OpenVsTerminal()<CR>
+nnoremap <leader>sv :source $HOME\_vimrc<CR>
+
+
+" Adjust the height of quickfix window
+au FileType qf call AdjustWindowHeight(10, 18)
+function! AdjustWindowHeight(minheight, maxheight)
+  exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+endfunction
+
+" Adjust the size of the window
+if has('gui_running')
+  nnoremap <C-=> <C-W>+
+  nnoremap <C-_> <C-W>-
+  nnoremap <C-.> <C-W>>
+  nnoremap <C-,> <C-W><
+endif
+
+if has('python3')
+  echo "Hash python3"
+endif
+
+let g:ycm_python_binary_path='D:\myapps\python3\python.exe'
+
+
+" YCM config
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_key_invoke_completion = '<C-Z>'
+let g:ycm_auto_trigger = 1
+let g:ycm_always_populate_location_list = 1
+
+"let g:ycm_min_num_identifier_candidate_chars = 1
+let g:ycm_clangd_uses_ycmd_caching = 0
+
+let g:ycm_complete_in_strings = 1
+
+" When the cursor hover on a type
+let g:ycm_auto_hover=''
+nmap <leader>dt <plug>(YCMHover)
+
+nnoremap <Leader>fi :YcmCompleter FixIt<CR>
+nnoremap <Leader>gt :YcmCompleter GoTo<CR>
+nnoremap <Leader>gd :YcmCompleter GoToDefinition<CR>
+nnoremap <Leader>gh :YcmCompleter GoToDeclaration<CR>
+nnoremap <Leader>gr :YcmCompleter GoToReferences<CR>
+nnoremap <Leader>rr :YcmCompleter RefactorRename<SPACE>
+
+tnoremap <C-j> <C-k>
+tnoremap <C-c> <C-c>
+nnoremap <C-V> <C-V>
+
+
+nnoremap <silent> <Leader>rn :update<CR> :call CompileAndRun()<CR>
+
+function! CompileAndRun()
+  let l:current_file_name = expand('%:t')    " e.g., myprogram.c
+  let l:current_file_root = expand('%:t:r')    " e.g., myprogram
+  let l:current_file_path = expand('%:p:h')  " e.g., /home/user/myproject
+
+  let l:compile_script = findfile('compile.ps1', l:current_file_path . ';')
+  let l:compile_script = fnamemodify(l:compile_script, ':p')
+  if empty(l:compile_script)
+    echoerr "compile.sh not found in " . l:current_file_path . " or parent directories!"
+    return
+  endif
+
+  let l:compile_command = l:compile_script . ' ' . l:current_file_name . ' -o ' . l:current_file_root . ' -Configuration Release'
+  let l:run_command = ''
+
+  if strridx(l:current_file_root, '/', 0) == 0
+    let l:run_command = l:current_file_root
+  elseif strridx(l:current_file_root, './', 0) == 0 || strridx(l:current_file_root, '../', 0) == 0
+    let l:run_command = l:current_file_root
+  else
+    let l:run_command = './' . l:current_file_root
+  endif
+
+  " let l:full_terminal_command = 'cd ' . shellescape(l:current_file_path) . ' && ' . l:compile_command . ' && ' . l:run_command
+  let l:full_terminal_command = 'cd ' . shellescape(l:current_file_path) . ' ; '
+            \ . l:compile_command . ' ; '
+            \ . 'if ($LASTEXITCODE -eq 0) { ' . l:run_command . ' }'
+
+  " echo compile_command
+  execute 'botright terminal ++shell ++noclose ++eof=keep'  l:full_terminal_command
+  setlocal nonumber
+  setlocal norelativenumber
+endfunction
+
