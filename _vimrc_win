@@ -248,12 +248,7 @@ if has('gui_running')
   nnoremap <C-,> <C-W><
 endif
 
-if has('python3')
-  echo "Hash python3"
-endif
-
 let g:ycm_python_binary_path='D:\myapps\python3\python.exe'
-
 
 " YCM config
 let g:ycm_autoclose_preview_window_after_insertion = 1
