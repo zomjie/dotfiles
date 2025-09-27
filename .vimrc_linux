@@ -408,6 +408,7 @@ nnoremap<F8> :if g:asyncrun_status != 'running'<bar>
       \if &modifiable<bar>
         \update<bar>
       \endif<bar>
+        \call Update_Makeprg()<bar>
         \exec 'Make'<bar>
       \else<bar>
         \AsyncStop<bar>
@@ -463,3 +464,24 @@ if !empty($SSH_CLIENT)
 endif
 "highlight YcmErrorSection cterm=undercurl, gui=undercurl guifg=#CF0F47
 "highlight YcmWarningSection cterm=undercurl, gui=undercurl guifg=#EF7722
+
+" LSP for cmake
+source /home/zomjie/LSP/lsp-examples/vimrc.generated
+
+nnoremap <Leader>cd :cd %:p:h<CR>
+
+vnoremap <silent> * "sy/\V<C-R>s<CR>
+
+function! Update_Makeprg()
+  let l:build_script = findfile("build.sh", ".;")
+  if empty(l:build_script)
+    let &makeprg = 'make'
+    return
+  endif
+  if strridx(l:build_script, '/', 0) == 0
+    let &makeprg = l:build_script
+  else
+    let &makeprg= './' . l:build_script
+  endif
+endfunction
+
