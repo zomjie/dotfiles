@@ -202,6 +202,7 @@ terminal:
   font: JetBrains Mono
   autoOpen: false
   fontWeight: 300
+  altIsMeta: true
 ssh:
   knownHosts:
     - host: 45.152.66.223
@@ -281,3 +282,4 @@ profiles:
 enableWelcomeTab: false
 pluginBlacklist: []
 recoverTabs: false
+enableAutomaticUpdates: false
