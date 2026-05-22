@@ -1,0 +1,29 @@
+model_provider = "crs"
+model = "gpt-5.3-codex"
+model_reasoning_effort = "xhigh"
+disable_response_storage = true
+preferred_auth_method = "apikey"
+personality = "pragmatic"
+approvals_reviewer = "user"
+
+[model_providers.crs]
+name = "codex"
+base_url = "https://xxx.xxx"
+wire_api = "responses"
+requires_openai_auth = true
+# env_key = "CRS_OAI_KEY"
+
+[notice.model_migrations]
+"gpt-5.1-codex-max" = "gpt-5.2-codex"
+"gpt-5.3-codex" = "gpt-5.4"
+"gpt-5.1-codex-mini" = "gpt-5.4"
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[tui]
+status_line = ["current-dir", "model-with-reasoning", "context-used", "total-input-tokens", "total-output-tokens", "approval-policy"]
+status_line_use_colors = true
